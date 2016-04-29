@@ -20,7 +20,7 @@ namespace MouseAimFlight.FlightModes
             return behavior;
         }
 
-        public string GetFlightMode()
+        public virtual string GetFlightMode()
         {
             return flightMode;
         }

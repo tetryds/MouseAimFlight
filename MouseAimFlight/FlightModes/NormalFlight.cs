@@ -45,5 +45,10 @@ namespace MouseAimFlight.FlightModes
 
             return behavior;
         }
+
+        public override string GetFlightMode()
+        {
+            return flightMode;
+        }
     }
 }
