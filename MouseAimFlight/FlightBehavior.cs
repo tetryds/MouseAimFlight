@@ -36,9 +36,9 @@ namespace MouseAimFlight
             modes.Add(newBehavior);
         }
 
-        public ErrorData Simulate(Transform vesselTransform, Vector3d targetDirection, Vector3d targetDirectionYaw, Vector3 targetPosition, Vector3 upDirection, float upWeighting, Vessel vessel)
+        public ErrorData Simulate(Transform vesselTransform, Transform velocityTransform, Vector3 targetPosition, Vector3 upDirection, float upWeighting, Vessel vessel)
         {
-            ErrorData errors = modes[activeMode].Simulate(vesselTransform, targetDirection, targetDirectionYaw, targetPosition, upDirection, upWeighting, vessel);
+            ErrorData errors = modes[activeMode].Simulate(vesselTransform, velocityTransform, targetPosition, upDirection, upWeighting, vessel);
             return errors;
         }
 

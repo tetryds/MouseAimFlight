@@ -15,8 +15,22 @@ namespace MouseAimFlight.FlightModes
 
         }
 
-        public override ErrorData Simulate(Transform vesselTransform, Vector3d targetDirection, Vector3d targetDirectionYaw, Vector3 targetPosition, Vector3 upDirection, float upWeighting, Vessel vessel)
+        public override ErrorData Simulate(Transform vesselTransform, Transform velocityTransform, Vector3 targetPosition, Vector3 upDirection, float upWeighting, Vessel vessel)
         {
+            Vector3d srfVel = vessel.srf_velocity;
+            if (srfVel != Vector3d.zero)
+            {
+                velocityTransform.rotation = Quaternion.LookRotation(srfVel, -vesselTransform.forward);
+            }
+            velocityTransform.rotation = Quaternion.AngleAxis(90, velocityTransform.right) * velocityTransform.rotation;
+            Vector3 localAngVel = vessel.angularVelocity * Mathf.Rad2Deg;
+
+            Vector3d targetDirection;
+            Vector3d targetDirectionYaw;
+
+            targetDirection = vesselTransform.InverseTransformDirection(targetPosition - velocityTransform.position).normalized;
+            targetDirectionYaw = targetDirection;
+
             float pitchError;
             float rollError;
             float yawError;

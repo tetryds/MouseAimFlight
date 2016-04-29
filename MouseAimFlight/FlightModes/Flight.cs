@@ -12,9 +12,10 @@ namespace MouseAimFlight.FlightModes
 
         public Flight()
         {
+
         }
 
-        public virtual ErrorData Simulate(Transform vesselTransform, Vector3d targetDirection, Vector3d targetDirectionYaw, Vector3 targetPosition, Vector3 upDirection, float upWeighting, Vessel vessel)
+        public virtual ErrorData Simulate(Transform vesselTransform, Transform velocityTransform, Vector3 targetPosition, Vector3 upDirection, float upWeighting, Vessel vessel)
         {
             ErrorData behavior = new ErrorData(0, 0, 0);
             return behavior;
