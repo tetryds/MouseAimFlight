@@ -44,6 +44,27 @@ namespace MouseAimFlight
             }
         }
 
+        static KeyCode flightModeKeyCode = KeyCode.O;
+        public static KeyCode FlightModeKeyCode
+        {
+            get { return flightModeKeyCode; }
+        }
+        static string flightModeKeyString = "O";
+        public static string FlightModeKeyString
+        {
+            get { return flightModeKeyString; }
+            set
+            {
+                string tmp = value.ToUpperInvariant();
+                if (tmp != flightModeKeyString && tmp.Length == 1)
+                {
+                    flightModeKeyString = tmp;
+                    flightModeKeyCode = (KeyCode)Enum.Parse(typeof(KeyCode), flightModeKeyString);
+                    Instance.SaveSettings();
+                }
+            }
+        }
+
         public enum CursorStyle
         {
             FULL,
@@ -131,7 +152,12 @@ namespace MouseAimFlight
                         toggleKeyString = ((string)node.GetValue("toggleKey")).ToUpperInvariant();
                         toggleKeyCode = (KeyCode)Enum.Parse(typeof(KeyCode), toggleKeyString);
                     }
-                    if(node.HasValue("cursorStyle"))
+                    if (node.HasValue("flightModeKey"))
+                    {
+                        flightModeKeyString = ((string)node.GetValue("flightModeKey")).ToUpperInvariant();
+                        flightModeKeyCode = (KeyCode)Enum.Parse(typeof(KeyCode), flightModeKeyString);
+                    }
+                    if (node.HasValue("cursorStyle"))
                     {
                         object temp = Enum.Parse(typeof(CursorStyle), (string)node.GetValue("cursorStyle"));
                         if (temp != null)
@@ -158,6 +184,7 @@ namespace MouseAimFlight
             ConfigNode node = new ConfigNode("MAFSettings");
             node.AddValue("name", "default");
             node.AddValue("toggleKey", toggleKeyCode.ToString());
+            node.AddValue("flightModeKey", flightModeKeyCode.ToString());
             node.AddValue("cursorStyle", cursor.ToString());
             node.AddValue("mouseSensitivity", mouseSensitivity.ToString());
             node.AddValue("invertX", invertX.ToString());

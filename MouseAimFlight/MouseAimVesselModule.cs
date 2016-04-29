@@ -143,6 +143,12 @@ namespace MouseAimFlight
             if (vessel != FlightGlobals.ActiveVessel || !mouseAimActive)
                 return;
 
+            if (Input.GetKeyDown(MouseAimSettings.FlightModeKeyCode))
+            {
+                flightMode.NextBehavior();
+                ScreenMessages.PostScreenMessage("Flight Mode: " + flightMode.GetBehaviorName());
+            }
+
             UpdateMouseCursorForCameraRotation();
             UpdateVesselScreenLocation();
             UpdateCursorScreenLocation();
