@@ -53,7 +53,7 @@ namespace MouseAimFlight.FlightModes
             rollError = VectorUtils.SignedAngle(currentRoll, rollTarget, vesselTransform.right) - sideslip * (float)Math.Sqrt(vessel.srf_velocity.magnitude) / 5;
 
             float pitchDownFactor = pitchError * (10 / ((float)Math.Pow(yawError, 2) + 10f) - 0.1f);
-            rollError -= Mathf.Clamp(pitchDownFactor, -15, 0);
+            rollError += Math.Sign(rollError)*Math.Abs(Mathf.Clamp(pitchDownFactor, -15, 0));
 
             ErrorData behavior = new ErrorData(pitchError, rollError, yawError);
 

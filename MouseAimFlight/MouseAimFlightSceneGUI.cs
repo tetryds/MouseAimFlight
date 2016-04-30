@@ -83,15 +83,19 @@ namespace MouseAimFlight
             if (mouseAimScreenLocation.z > 0)
             {
                 Rect aimRect = new Rect(mouseAimScreenLocation.x - (0.5f * size), (Screen.height - mouseAimScreenLocation.y) - (0.5f * size), size, size);
-
+                Color oldcolor = GUI.color;
+                GUI.color = new Color(1, 1, 1, MouseAimSettings.CursorOpacity);
                 GUI.DrawTexture(aimRect, mouseCursorReticle);
+                GUI.color = oldcolor;
             }
 
             if (vesselForwardScreenLocation.z > 0)
             {
                 Rect directionRect = new Rect(vesselForwardScreenLocation.x - (0.5f * size), (Screen.height - vesselForwardScreenLocation.y) - (0.5f * size), size, size);
-
+                Color oldcolor = GUI.color;
+                GUI.color = new Color(1, 1, 1, MouseAimSettings.CursorOpacity);
                 GUI.DrawTexture(directionRect, vesselForwardReticle);
+                GUI.color = oldcolor;
             }
         }
 
@@ -125,13 +129,18 @@ namespace MouseAimFlight
             GUILayout.BeginHorizontal(GUILayout.Width(200));
             if(GUILayout.Button("Cursor: ", GUILayout.Width(100)))
                 CycleCursor();
+            Color oldcolor = GUI.color;
+            GUI.color = new Color(1, 1, 1, MouseAimSettings.CursorOpacity);
             GUI.DrawTexture(new Rect(125, 100, 60, 60), vesselForwardReticle);
+            GUI.color = oldcolor;
             GUILayout.EndHorizontal();
 
             GUILayout.Space(10);
 
             GUILayout.Label("Mouse Sensitivity: " + MouseAimSettings.MouseSensitivity);
             MouseAimSettings.MouseSensitivity = GUILayout.HorizontalSlider(MouseAimSettings.MouseSensitivity, 25, 500);
+            GUILayout.Label("Cursor Opacity: " + MouseAimSettings.CursorOpacity);
+            MouseAimSettings.CursorOpacity = GUILayout.HorizontalSlider(MouseAimSettings.CursorOpacity, 0, 1);
             MouseAimSettings.InvertXAxis = GUILayout.Toggle(MouseAimSettings.InvertXAxis, "Invert X Axis");
             MouseAimSettings.InvertYAxis = GUILayout.Toggle(MouseAimSettings.InvertYAxis, "Invert Y Axis");
             GUILayout.EndVertical();
