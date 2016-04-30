@@ -75,11 +75,13 @@ namespace MouseAimFlight
             {
                 Cursor.lockState = CursorLockMode.Locked;
                 Cursor.visible = false;
+                ScreenMessages.PostScreenMessage("MAF Enabled");
             }
             else
             {
                 Cursor.lockState = CursorLockMode.None;
                 Cursor.visible = true;
+                ScreenMessages.PostScreenMessage("MAF Disabled");
             }
             targetPosition = vesselTransform.up * 5000f;     //if it's activated, set it to the baseline
             UpdateCursorScreenLocation();
@@ -113,6 +115,13 @@ namespace MouseAimFlight
 
         void Update()
         {
+            if (vessel != FlightGlobals.ActiveVessel)
+            {
+                if (mouseAimActive)
+                    ToggleMouseAim();
+                return;
+            }
+
             if (PauseMenu.isOpen)
             {
                 if (mouseAimActive)
@@ -140,14 +149,14 @@ namespace MouseAimFlight
                 ToggleMouseAim();
             }
 
-            if (vessel != FlightGlobals.ActiveVessel || !mouseAimActive)
-                return;
-
             if (Input.GetKeyDown(MouseAimSettings.FlightModeKeyCode))
             {
                 flightMode.NextBehavior();
                 ScreenMessages.PostScreenMessage("Flight Mode: " + flightMode.GetBehaviorName());
             }
+
+            if (!mouseAimActive)
+                return;
 
             UpdateMouseCursorForCameraRotation();
             UpdateVesselScreenLocation();
@@ -162,7 +171,7 @@ namespace MouseAimFlight
 
         void MouseAimPilot(FlightCtrlState s)
         {
-            if (vessel != FlightGlobals.ActiveVessel || !mouseAimActive || PauseMenu.isOpen)
+            if (vessel != FlightGlobals.ActiveVessel || !mouseAimActive || PauseMenu.isOpen) //Now this depends only on if mouse aim is active or not, but will leave it this way for now
                 return;
 
             vesselTransform = vessel.ReferenceTransform;
@@ -280,27 +289,27 @@ namespace MouseAimFlight
             return radarAlt;
         }
 
-        void TweakControlSurfaces(bool mouseFlightActive)
+        void TweakControlSurfaces(bool mouseFlightActive) //Tweak stock control surfaces for sane behavior
         {
             if (!MouseAimSettings.FARLoaded)
             {
                 if (mouseFlightActive)
                 {
-                    foreach (var ctrlSurface in vessel.FindPartModulesImplementing<ModuleControlSurface>())
+                    foreach (var ctrlSurface in vessel.FindPartModulesImplementing<ModuleControlSurface>()) //Only use if not performance critical, really.
                     {
                         ctrlSurface.useExponentialSpeed = true;
                         ctrlSurface.actuatorSpeed *= 2.5f;
-                        Debug.Log("[MAF]: MAF Enabled, Control Surfaces Tweaked");
                     }
+                    Debug.Log("[MAF]: MAF Enabled, Control Surfaces Tweaked");
                 }
                 else
                 {
-                    foreach (var ctrlSurface in vessel.FindPartModulesImplementing<ModuleControlSurface>())
+                    foreach (var ctrlSurface in vessel.FindPartModulesImplementing<ModuleControlSurface>()) //Only use if not performance critical, really.
                     {
                         ctrlSurface.useExponentialSpeed = false;
                         ctrlSurface.actuatorSpeed /= 2.5f;
-                        Debug.Log("[MAF]: MAF Disabled, Control Surfaces Reverted");
                     }
+                    Debug.Log("[MAF]: MAF Disabled, Control Surfaces Reverted");
                 }
             }
         }
