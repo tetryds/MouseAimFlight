@@ -36,10 +36,6 @@ namespace MouseAimFlight
         Vessel vessel;
         Transform vesselTransform;
 
-        float upWeighting = 0; //Upweighting not working, updating it on the GUI doesn't work either.
-
-        string upWeightingStr;
-
         AdaptivePID pilot;
         FlightBehavior flightMode;
 
@@ -72,14 +68,29 @@ namespace MouseAimFlight
             }
         }
 
+        void ToggleMouseAim() //Mouse aim must not be toggled by anything other than this function
+        {
+            mouseAimActive = !mouseAimActive;
+            if (mouseAimActive)
+            {
+                Cursor.lockState = CursorLockMode.Locked;
+                Cursor.visible = false;
+            }
+            else
+            {
+                Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = true;
+            }
+            targetPosition = vesselTransform.up * 5000f;     //if it's activated, set it to the baseline
+            UpdateCursorScreenLocation();
+            TweakControlSurfaces(mouseAimActive); //Remove when stock control surfaces are fixed
+        }
 
         void Start()
         {
 
             vessel = GetComponent<Vessel>();
             vessel.OnAutopilotUpdate += MouseAimPilot;
-
-            upWeightingStr = upWeighting.ToString();
 
             pilot = new AdaptivePID();
             flightMode = new FlightBehavior();
@@ -104,7 +115,8 @@ namespace MouseAimFlight
         {
             if (PauseMenu.isOpen)
             {
-                mouseAimActive = false;
+                if (mouseAimActive)
+                    ToggleMouseAim();
                 //forceCursorResetNextFrame = true;
                 return;
             } 
@@ -125,19 +137,7 @@ namespace MouseAimFlight
             }
             else if (Input.GetKeyDown(MouseAimSettings.ToggleKeyCode))
             {
-                mouseAimActive = !mouseAimActive;
-                if (mouseAimActive)
-                {
-                    Cursor.lockState = CursorLockMode.Locked;
-                    Cursor.visible = false;
-                }
-                else
-                {
-                    Cursor.lockState = CursorLockMode.None;
-                    Cursor.visible = true;
-                }
-                targetPosition = vesselTransform.up * 5000f;     //if it's activated, set it to the baseline
-                UpdateCursorScreenLocation();
+                ToggleMouseAim();
             }
 
             if (vessel != FlightGlobals.ActiveVessel || !mouseAimActive)
@@ -248,10 +248,6 @@ namespace MouseAimFlight
 
         void FlyToPosition(FlightCtrlState s, Vector3 targetPosition)
         {
-
-            //float yawError;
-            //float pitchError;
-            //float rollError;
             Vector3 localAngVel = vessel.angularVelocity * Mathf.Rad2Deg;
 
             float terrainAltitude;
@@ -263,7 +259,7 @@ namespace MouseAimFlight
             dynPressure = (float)vessel.dynamicPressurekPa;
             velocity = (float)vessel.srfSpeed;
 
-            upWeighting = pilot.UpWeighting(terrainAltitude, dynPressure, velocity);
+            float upWeighting = pilot.UpWeighting(terrainAltitude, dynPressure, velocity);
 
             //Calculating errors
             ErrorData behavior = flightMode.Simulate(vesselTransform, velocityTransform, targetPosition, upDirection, upWeighting, vessel);
@@ -284,12 +280,35 @@ namespace MouseAimFlight
             return radarAlt;
         }
 
-        void OnDestroy()
+        void TweakControlSurfaces(bool mouseFlightActive)
         {
-            if(vessel)
-                vessel.OnAutopilotUpdate -= MouseAimPilot;
+            if (!MouseAimSettings.FARLoaded)
+            {
+                if (mouseFlightActive)
+                {
+                    foreach (var ctrlSurface in vessel.FindPartModulesImplementing<ModuleControlSurface>())
+                    {
+                        ctrlSurface.useExponentialSpeed = true;
+                        ctrlSurface.actuatorSpeed *= 2.5f;
+                        Debug.Log("[MAF]: MAF Enabled, Control Surfaces Tweaked");
+                    }
+                }
+                else
+                {
+                    foreach (var ctrlSurface in vessel.FindPartModulesImplementing<ModuleControlSurface>())
+                    {
+                        ctrlSurface.useExponentialSpeed = false;
+                        ctrlSurface.actuatorSpeed /= 2.5f;
+                        Debug.Log("[MAF]: MAF Disabled, Control Surfaces Reverted");
+                    }
+                }
+            }
         }
 
-
+        void OnDestroy()
+        {
+            if (vessel)
+                vessel.OnAutopilotUpdate -= MouseAimPilot;
+        }
     }
 }

@@ -42,13 +42,12 @@ namespace MouseAimFlight
         {
             float speedFactor = vel / dynPress / 16; //More work needs to be done to sanitize speedFactor
 
-            if (speedFactor > 1.5f)
-                speedFactor = 1.5f;
+            if (speedFactor > 1.2f)
+                speedFactor = 1.2f;
 
             float trimFactor = (float)Math.Sqrt(speedFactor);
 
-            if (!MouseAimSettings.FARLoaded)                //TODO: definitely remove this in favor of adaptation that works with FAR
-                AdaptGains(pitchError, rollError, yawError, angVel, terrainAltitude, timestep, dynPress, vel, trimFactor);
+            //AdaptGains(pitchError, rollError, yawError, angVel, terrainAltitude, timestep, dynPress, vel, trimFactor);
 
             float steerPitch = pitchPID.Simulate(pitchError, angVel.x, pIntLimit * trimFactor, timestep, speedFactor);
             float steerRoll = rollPID.Simulate(rollError, angVel.y, rIntLimit, timestep, speedFactor);
@@ -63,19 +62,7 @@ namespace MouseAimFlight
         
         void AdaptGains(float pitchError, float rollError, float yawError, UnityEngine.Vector3 angVel, float terrainAltitude, float timestep, float dynPress, float vel, float trimFactor) //should remove trimfactor
         {
-            if ((float)Math.Abs(pitchError * pitchPID.kp * trimFactor) < pIntLimit * trimFactor) //find a better way to do this (damping kicks in only when proportional gain is smaller than the max integral gain)
-            {
-                pitchPID.kp = pitchP * 0.1f;
-                pitchPID.ki = pitchI * 2f;
-                pitchPID.kd = pitchD * 0.1f;
-            }
-            else
-            {
-                pitchPID.kp = pitchP;
-                pitchPID.ki = pitchI;
-                pitchPID.kd = pitchD;
-            }
-            //There will be some cooler code in here in the future.
+            //There will be some cool code in here in the future.
         }
 
     }

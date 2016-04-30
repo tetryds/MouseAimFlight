@@ -108,27 +108,27 @@ namespace MouseAimFlight
         void GUIWindow(int windowID)
         {
             GUILayout.BeginVertical();
-            GUILayout.BeginHorizontal(GUILayout.Width(180));
-            GUILayout.Label("Toggle MouseAim Key: ");
+            GUILayout.BeginHorizontal(GUILayout.Width(200));
+            GUILayout.Label("Toggle MouseAim Key:  "); //Ugly cheap way of aligning input boxes by adding a space on the end
             MouseAimSettings.ToggleKeyString = GUILayout.TextField(MouseAimSettings.ToggleKeyString, 1, GUILayout.Width(25));
             GUILayout.EndHorizontal();
 
             GUILayout.Space(5);
 
-            GUILayout.BeginHorizontal(GUILayout.Width(180));
+            GUILayout.BeginHorizontal(GUILayout.Width(200));
             GUILayout.Label("Toggle FlightMode Key: ");
             MouseAimSettings.FlightModeKeyString = GUILayout.TextField(MouseAimSettings.FlightModeKeyString, 1, GUILayout.Width(25));
             GUILayout.EndHorizontal();
 
-            GUILayout.Space(5);
+            GUILayout.Space(10);
 
-            GUILayout.BeginHorizontal(GUILayout.Width(180));
+            GUILayout.BeginHorizontal(GUILayout.Width(200));
             if(GUILayout.Button("Cursor: ", GUILayout.Width(100)))
                 CycleCursor();
-            GUI.DrawTexture(new Rect(120, 65, 35, 35), vesselForwardReticle);
+            GUI.DrawTexture(new Rect(125, 100, 60, 60), vesselForwardReticle);
             GUILayout.EndHorizontal();
 
-            GUILayout.Space(5);
+            GUILayout.Space(10);
 
             GUILayout.Label("Mouse Sensitivity: " + MouseAimSettings.MouseSensitivity);
             MouseAimSettings.MouseSensitivity = GUILayout.HorizontalSlider(MouseAimSettings.MouseSensitivity, 25, 500);

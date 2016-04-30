@@ -85,7 +85,7 @@ namespace MouseAimFlight
             }
         }
 
-        static float mouseSensitivity = 100;
+        static int mouseSensitivity = 100;
         public static float MouseSensitivity
         {
             get { return mouseSensitivity; }
@@ -93,7 +93,9 @@ namespace MouseAimFlight
             {
                 if (value != mouseSensitivity)
                 {
-                    mouseSensitivity = value;
+                    mouseSensitivity = (int)value;
+                    if (mouseSensitivity >= 98 && mouseSensitivity <= 102) //Making sure you can get it back to 100
+                        mouseSensitivity = 100;
                     Instance.SaveSettings();
                 }
             }
@@ -165,7 +167,7 @@ namespace MouseAimFlight
                     }
                     if (node.HasValue("mouseSensitivity"))
                     {
-                        float.TryParse(node.GetValue("mouseSensitivity"), out mouseSensitivity);
+                        int.TryParse(node.GetValue("mouseSensitivity"), out mouseSensitivity);
                     }
                     if(node.HasValue("invertX"))
                     {
@@ -209,9 +211,9 @@ namespace MouseAimFlight
             }
 
             if(FARLoaded)
-                Debug.Log("[MAF]: FAR loaded, switching adaptive gain settings");
+                Debug.Log("[MAF]: FAR loaded, disabling control surfaces tweaks");
             else
-                Debug.Log("[MAF]: Stock aero model loaded, switching adaptive gain settings");
+                Debug.Log("[MAF]: Stock aero model loaded, ready to tweak control surfaces");
         }
     }
 }
