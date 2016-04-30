@@ -28,7 +28,7 @@ namespace MouseAimFlight.FlightModes
             Vector3d targetDirection;
             Vector3d targetDirectionYaw;
 
-            targetDirection = vesselTransform.InverseTransformDirection(targetPosition - velocityTransform.position).normalized;
+            targetDirection = vesselTransform.InverseTransformDirection(targetPosition - vessel.CurrentCoM).normalized;
             targetDirectionYaw = targetDirection;
 
             float pitchError;

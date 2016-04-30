@@ -28,7 +28,7 @@ namespace MouseAimFlight.FlightModes
             Vector3d targetDirection;
             Vector3d targetDirectionYaw;
 
-            targetDirection = vesselTransform.InverseTransformDirection(targetPosition - velocityTransform.position).normalized;
+            targetDirection = vesselTransform.InverseTransformDirection(targetPosition - vessel.CurrentCoM).normalized;
             targetDirectionYaw = targetDirection;
             
             float pitchError;
@@ -37,7 +37,7 @@ namespace MouseAimFlight.FlightModes
 
             float sideslip;
 
-            Vector3d target = (targetPosition - velocityTransform.position).normalized;
+            Vector3d target = (targetPosition - vessel.CurrentCoM).normalized;
 
             sideslip = (float)Math.Asin(Vector3.Dot(vesselTransform.right, vessel.srf_velocity.normalized)) * Mathf.Rad2Deg;
             
@@ -49,14 +49,14 @@ namespace MouseAimFlight.FlightModes
             Vector3 currentRoll = -vesselTransform.forward;
             Vector3 rollTarget;
 
-            rollTarget = (targetPosition + Mathf.Clamp(upWeighting * (100f - Math.Abs(yawError * 2.5f)), 0, float.PositiveInfinity) * upDirection) - vessel.CoM;
+            rollTarget = (targetPosition + Mathf.Clamp(2 * upWeighting * (100f - Math.Abs(yawError * 1.8f)), 0, float.PositiveInfinity) * upDirection) - vessel.CurrentCoM;
 
             rollTarget = Vector3.ProjectOnPlane(rollTarget, vesselTransform.up);
 
             rollError = VectorUtils.SignedAngle(currentRoll, rollTarget, vesselTransform.right) - sideslip * (float)Math.Sqrt(vessel.srf_velocity.magnitude) / 5;
 
-            float pitchDownFactor = pitchError * (100 / ((float)Math.Pow(yawError, 2) + 100));
-            rollError -= Mathf.Clamp(pitchDownFactor, -15, 0);
+            float pitchDownFactor = pitchError * (1 / ((float)Math.Pow(yawError, 2)/1000 + 1));
+            rollError -= Mathf.Clamp(pitchDownFactor, -20, 0);
 
             ErrorData behavior = new ErrorData(pitchError, rollError, yawError);
 
