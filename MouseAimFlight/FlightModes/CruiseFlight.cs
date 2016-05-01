@@ -8,7 +8,7 @@ namespace MouseAimFlight.FlightModes
 {
     class CruiseFlight : Flight
     {
-        private static string flightMode = "Cruise Flight";
+        private static string flightMode = "Cruise Flight [Experimental]";
 
         public CruiseFlight()
         {

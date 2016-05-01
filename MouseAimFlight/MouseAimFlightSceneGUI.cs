@@ -138,7 +138,7 @@ namespace MouseAimFlight
             GUILayout.Space(10);
 
             GUILayout.Label("Mouse Sensitivity: " + MouseAimSettings.MouseSensitivity);
-            MouseAimSettings.MouseSensitivity = GUILayout.HorizontalSlider(MouseAimSettings.MouseSensitivity, 25, 500);
+            MouseAimSettings.MouseSensitivity = (int)GUILayout.HorizontalSlider(MouseAimSettings.MouseSensitivity, 25, 500);
             GUILayout.Label("Cursor Opacity: " + MouseAimSettings.CursorOpacity);
             MouseAimSettings.CursorOpacity = GUILayout.HorizontalSlider(MouseAimSettings.CursorOpacity, 0, 1);
             GUILayout.Label("Cursor Size: " + MouseAimSettings.CursorSize);

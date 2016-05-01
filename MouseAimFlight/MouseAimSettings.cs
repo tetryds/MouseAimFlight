@@ -86,14 +86,14 @@ namespace MouseAimFlight
         }
 
         static int mouseSensitivity = 100;
-        public static float MouseSensitivity
+        public static int MouseSensitivity
         {
             get { return mouseSensitivity; }
             set
             {
                 if (value != mouseSensitivity)
                 {
-                    mouseSensitivity = (int)value;
+                    mouseSensitivity = value;
                     if (mouseSensitivity >= 98 && mouseSensitivity <= 102) //Making sure you can get it back to 100
                         mouseSensitivity = 100;
                     Instance.SaveSettings();
@@ -109,7 +109,7 @@ namespace MouseAimFlight
             {
                 if (value != cursorOpacity)
                 {
-                    cursorOpacity = value;
+                    cursorOpacity = (float)Math.Round(value, 2);
                     Instance.SaveSettings();
                 }
             }
@@ -123,7 +123,7 @@ namespace MouseAimFlight
             {
                 if (value != cursorSize)
                 {
-                    cursorSize = value;
+                    cursorSize = (float)Math.Round(value, 2);
                     Instance.SaveSettings();
                 }
             }

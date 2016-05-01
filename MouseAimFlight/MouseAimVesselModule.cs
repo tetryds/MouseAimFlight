@@ -75,7 +75,7 @@ namespace MouseAimFlight
             {
                 Cursor.lockState = CursorLockMode.Locked;
                 Cursor.visible = false;
-                ScreenMessages.PostScreenMessage("MAF Enabled");
+                ScreenMessages.PostScreenMessage("MAF Enabled: " + flightMode.GetBehaviorName());
             }
             else
             {
@@ -90,13 +90,15 @@ namespace MouseAimFlight
 
         void Start()
         {
-            if (vessel.isEVA)
+            vessel = GetComponent<Vessel>();
+
+            if (vessel.isEVA == true)
             {
                 this.enabled = false; //No MAF for EVA
+                Debug.Log("[MAF]: MAF Disabled for " + vessel.vesselName + " on EVA");
                 return;
             }
 
-            vessel = GetComponent<Vessel>();
             vessel.OnAutopilotUpdate += MouseAimPilot;
 
             pilot = new AdaptivePID();
