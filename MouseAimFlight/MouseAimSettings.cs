@@ -115,6 +115,20 @@ namespace MouseAimFlight
             }
         }
 
+        static float cursorSize = 1;
+        public static float CursorSize
+        {
+            get { return cursorSize; }
+            set
+            {
+                if (value != cursorSize)
+                {
+                    cursorSize = value;
+                    Instance.SaveSettings();
+                }
+            }
+        }
+
         static bool invertY = false;
         static bool invertX = false;
         public static bool InvertYAxis
@@ -187,6 +201,10 @@ namespace MouseAimFlight
                     {
                         float.TryParse(node.GetValue("cursorOpacity"), out cursorOpacity);
                     }
+                    if (node.HasValue("cursorSize"))
+                    {
+                        float.TryParse(node.GetValue("cursorSize"), out cursorSize);
+                    }
                     if (node.HasValue("invertX"))
                     {
                         bool.TryParse(node.GetValue("invertX"), out invertX);
@@ -208,6 +226,7 @@ namespace MouseAimFlight
             node.AddValue("cursorStyle", cursor.ToString());
             node.AddValue("mouseSensitivity", mouseSensitivity.ToString());
             node.AddValue("cursorOpacity", cursorOpacity.ToString());
+            node.AddValue("cursorSize", CursorSize.ToString());
             node.AddValue("invertX", invertX.ToString());
             node.AddValue("invertY", invertY.ToString());
 

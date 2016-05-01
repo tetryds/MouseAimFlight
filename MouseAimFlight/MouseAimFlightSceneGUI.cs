@@ -79,7 +79,7 @@ namespace MouseAimFlight
 
         public static void DisplayMouseAimReticles(Vector3 mouseAimScreenLocation, Vector3 vesselForwardScreenLocation)
         {
-            float size = Screen.width / 32;
+            float size = MouseAimSettings.CursorSize * Screen.width / 32;
             if (mouseAimScreenLocation.z > 0)
             {
                 Rect aimRect = new Rect(mouseAimScreenLocation.x - (0.5f * size), (Screen.height - mouseAimScreenLocation.y) - (0.5f * size), size, size);
@@ -141,6 +141,8 @@ namespace MouseAimFlight
             MouseAimSettings.MouseSensitivity = GUILayout.HorizontalSlider(MouseAimSettings.MouseSensitivity, 25, 500);
             GUILayout.Label("Cursor Opacity: " + MouseAimSettings.CursorOpacity);
             MouseAimSettings.CursorOpacity = GUILayout.HorizontalSlider(MouseAimSettings.CursorOpacity, 0, 1);
+            GUILayout.Label("Cursor Size: " + MouseAimSettings.CursorSize);
+            MouseAimSettings.CursorSize = GUILayout.HorizontalSlider(MouseAimSettings.CursorSize, 0.4f, 1);
             MouseAimSettings.InvertXAxis = GUILayout.Toggle(MouseAimSettings.InvertXAxis, "Invert X Axis");
             MouseAimSettings.InvertYAxis = GUILayout.Toggle(MouseAimSettings.InvertYAxis, "Invert Y Axis");
             GUILayout.EndVertical();

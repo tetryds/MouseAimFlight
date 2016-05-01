@@ -90,6 +90,11 @@ namespace MouseAimFlight
 
         void Start()
         {
+            if (vessel.isEVA)
+            {
+                this.enabled = false; //No MAF for EVA
+                return;
+            }
 
             vessel = GetComponent<Vessel>();
             vessel.OnAutopilotUpdate += MouseAimPilot;
