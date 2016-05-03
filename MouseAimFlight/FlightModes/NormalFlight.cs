@@ -55,6 +55,8 @@ namespace MouseAimFlight.FlightModes
             float pitchDownFactor = pitchError * (10 / ((float)Math.Pow(yawError, 2) + 10f) - 0.1f);
             rollError += Math.Sign(rollError)*Math.Abs(Mathf.Clamp(pitchDownFactor, -15, 0));
 
+            pitchError -= Math.Abs(Mathf.Clamp(rollError, -pitchError, +pitchError)/3);
+
             ErrorData behavior = new ErrorData(pitchError, rollError, yawError);
 
             return behavior;
