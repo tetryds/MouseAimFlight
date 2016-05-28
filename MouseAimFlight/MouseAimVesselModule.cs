@@ -305,7 +305,7 @@ namespace MouseAimFlight
                     foreach (var ctrlSurface in vessel.FindPartModulesImplementing<ModuleControlSurface>()) //Only use if not performance critical, really.
                     {
                         ctrlSurface.useExponentialSpeed = true;
-                        ctrlSurface.actuatorSpeed *= 2.5f;
+                        ctrlSurface.actuatorSpeed *= 3.5f;
                     }
                     Debug.Log("[MAF]: MAF Enabled, Control Surfaces Tweaked");
                 }
@@ -314,7 +314,7 @@ namespace MouseAimFlight
                     foreach (var ctrlSurface in vessel.FindPartModulesImplementing<ModuleControlSurface>()) //Only use if not performance critical, really.
                     {
                         ctrlSurface.useExponentialSpeed = false;
-                        ctrlSurface.actuatorSpeed /= 2.5f;
+                        ctrlSurface.actuatorSpeed /= 3.5f;
                     }
                     Debug.Log("[MAF]: MAF Disabled, Control Surfaces Reverted");
                 }
