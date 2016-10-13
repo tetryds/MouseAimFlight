@@ -6,11 +6,11 @@ using UnityEngine;
 
 namespace MouseAimFlight.FlightModes
 {
-    class CruiseFlight : Flight
+    class AggressiveFlight : Flight
     {
-        private static string flightMode = "Cruise Flight";
+        private static string flightMode = "Aggressive Flight";
 
-        public CruiseFlight()
+        public AggressiveFlight()
         {
 
         }
@@ -30,40 +30,35 @@ namespace MouseAimFlight.FlightModes
 
             targetDirection = vesselTransform.InverseTransformDirection(targetPosition - vessel.CurrentCoM).normalized;
             targetDirectionYaw = targetDirection;
-            
+
             float pitchError;
             float rollError;
             float yawError;
 
             float sideslip;
 
-            float pitchErrorHorizon;
-            float pitchErrorTarget;
-
-            Vector3d target = (targetPosition - vessel.CurrentCoM).normalized;
-
             sideslip = (float)Math.Asin(Vector3.Dot(vesselTransform.right, vessel.srf_velocity.normalized)) * Mathf.Rad2Deg;
-            
-            pitchErrorHorizon = ((float)Math.Acos(Vector3.Dot(vesselTransform.up, vessel.upAxis)) - (float)Math.Acos(Vector3.Dot(target, vessel.upAxis))) * Mathf.Rad2Deg;
-            pitchErrorTarget = (float)Math.Asin(Vector3d.Dot(Vector3d.back, VectorUtils.Vector3dProjectOnPlane(targetDirection, Vector3d.right))) * Mathf.Rad2Deg;
 
-            yawError = 1.5f * (float)Math.Asin(Vector3d.Dot(Vector3d.right, VectorUtils.Vector3dProjectOnPlane(targetDirectionYaw, Vector3d.forward))) * Mathf.Rad2Deg;
-
-            pitchError = (pitchErrorHorizon + pitchErrorTarget)/2f;
+            pitchError = (float)Math.Asin(Vector3d.Dot(Vector3d.back, VectorUtils.Vector3dProjectOnPlane(targetDirection, Vector3d.right))) * Mathf.Rad2Deg;
+            yawError = (float)Math.Asin(Vector3d.Dot(Vector3d.right, VectorUtils.Vector3dProjectOnPlane(targetDirectionYaw, Vector3d.forward))) * Mathf.Rad2Deg;
 
             //roll
             Vector3 currentRoll = -vesselTransform.forward;
             Vector3 rollTarget;
 
-            rollTarget = (targetPosition + Mathf.Clamp(2 * upWeighting * (100f - Math.Abs(yawError * 1.8f)), 0, float.PositiveInfinity) * upDirection) - vessel.CurrentCoM;
+            rollTarget = (targetPosition + Mathf.Clamp(upWeighting * (100f - Math.Abs(yawError * 1.6f) - (pitchError * 2.8f)), 0, float.PositiveInfinity) * upDirection) - vessel.CoM;
 
             rollTarget = Vector3.ProjectOnPlane(rollTarget, vesselTransform.up);
 
             rollError = VectorUtils.SignedAngle(currentRoll, rollTarget, vesselTransform.right) - sideslip * (float)Math.Sqrt(vessel.srf_velocity.magnitude) / 5;
 
-            float pitchDownFactor = pitchError * (1 / ((yawError * yawError)/1000 + 1));
-            rollError += Math.Sign(rollError) * Math.Abs(Mathf.Clamp(pitchDownFactor, -20, 0));
+            float pitchDownFactor = pitchError * (10 / ((float)Math.Pow(yawError, 2) + 10f) - 0.1f);
+            rollError += Math.Sign(rollError) * Math.Abs(Mathf.Clamp(pitchDownFactor, -15, 0));
 
+            //pitchError -= Math.Abs(Mathf.Clamp(rollError, -pitchError, +pitchError) / 3);
+
+            pitchError += 1 - Mathf.Exp(-pitchError);
+            
             ErrorData behavior = new ErrorData(pitchError, rollError, yawError);
 
             return behavior;

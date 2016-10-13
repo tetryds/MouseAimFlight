@@ -271,7 +271,7 @@ namespace MouseAimFlight
             float velocity;
 
             //Setup
-            terrainAltitude = GetRadarAltitude();
+            terrainAltitude = (float)vessel.radarAltitude;
             dynPressure = (float)vessel.dynamicPressurekPa;
             velocity = (float)vessel.srfSpeed;
 
@@ -288,12 +288,6 @@ namespace MouseAimFlight
             if (s.roll == s.rollTrim)
                 s.roll = Mathf.Clamp(steer.roll, -1, 1);
             s.yaw = Mathf.Clamp(steer.yaw, -1, 1);
-        }
-
-        float GetRadarAltitude()
-        {
-            float radarAlt = Mathf.Clamp((float)(vessel.mainBody.GetAltitude(vessel.findWorldCenterOfMass()) - vessel.terrainAltitude), 0, (float)vessel.altitude);
-            return radarAlt;
         }
 
         void TweakControlSurfaces(bool mouseFlightActive) //Tweak stock control surfaces for sane behavior

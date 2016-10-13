@@ -17,6 +17,7 @@ namespace MouseAimFlight
         //Hardcoded Behaviors
         FlightModes.NormalFlight normalFlight;
         FlightModes.CruiseFlight cruiseFlight;
+        FlightModes.AggressiveFlight aggressiveFlight;
 
         private int activeMode = 0;
 
@@ -29,6 +30,9 @@ namespace MouseAimFlight
 
             cruiseFlight = new FlightModes.CruiseFlight();
             AddBehavior(cruiseFlight);
+
+            aggressiveFlight = new FlightModes.AggressiveFlight();
+            AddBehavior(aggressiveFlight);
         }
 
         void AddBehavior(FlightModes.Flight newBehavior) //Adds behavior to the behaviors list
