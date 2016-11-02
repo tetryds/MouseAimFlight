@@ -30,7 +30,7 @@ namespace MouseAimFlight
             yawPID = new PID(yawP, yawI, yawD);
         }
 
-        public float UpWeighting(float terrainAltitude, float dynPress, float velocity)
+        public float UpWeighting(float terrainAltitude, float velocity)
         {
             if (terrainAltitude < 50)
                 return (10 - 0.18f * terrainAltitude) * upWeighting;

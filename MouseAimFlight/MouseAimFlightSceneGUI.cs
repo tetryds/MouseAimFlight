@@ -36,8 +36,6 @@ namespace MouseAimFlight
     {
         static MouseAimFlightSceneGUI instance;
         public static MouseAimFlightSceneGUI Instance { get { return instance; } }
-
-        static bool ready = false;
         static ApplicationLauncherButton mAFButton = null;
         static bool showGUI = false;
         static Rect guiRect;

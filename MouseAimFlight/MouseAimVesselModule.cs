@@ -33,7 +33,6 @@ namespace MouseAimFlight
 {
     public class MouseAimVesselModule : VesselModule
     {
-        Vessel vessel;
         Transform vesselTransform;
 
         AdaptivePID pilot;
@@ -90,15 +89,6 @@ namespace MouseAimFlight
 
         void Start()
         {
-            vessel = GetComponent<Vessel>();
-
-            if (vessel.isEVA == true)
-            {
-                this.enabled = false; //No MAF for EVA
-                Debug.Log("[MAF]: MAF Disabled for " + vessel.vesselName + " on EVA");
-                return;
-            }
-
             vessel.OnAutopilotUpdate += MouseAimPilot;
 
             pilot = new AdaptivePID();
@@ -122,7 +112,7 @@ namespace MouseAimFlight
 
         void Update()
         {
-            if (vessel != FlightGlobals.ActiveVessel)
+            if ((vessel != FlightGlobals.ActiveVessel) || vessel.isEVA)
             {
                 if (mouseAimActive)
                     ToggleMouseAim();
@@ -218,7 +208,7 @@ namespace MouseAimFlight
 
                 Transform cameraTransform = FlightCamera.fetch.mainCamera.transform;
 
-                Vector3 localTarget = cameraTransform.InverseTransformDirection(targetPosition);
+                Vector3d localTarget = cameraTransform.InverseTransformDirection(targetPosition);
                 localTarget += mouseDelta;
                 localTarget.Normalize();
                 localTarget *= 5000f;
@@ -271,11 +261,11 @@ namespace MouseAimFlight
             float velocity;
 
             //Setup
-            terrainAltitude = (float)vessel.radarAltitude;
+            terrainAltitude = (float)vessel.heightFromTerrain;
             dynPressure = (float)vessel.dynamicPressurekPa;
             velocity = (float)vessel.srfSpeed;
 
-            float upWeighting = pilot.UpWeighting(terrainAltitude, dynPressure, velocity);
+            float upWeighting = pilot.UpWeighting(terrainAltitude, velocity);
 
             //Calculating errors
             ErrorData behavior = flightMode.Simulate(vesselTransform, velocityTransform, targetPosition, upDirection, upWeighting, vessel);

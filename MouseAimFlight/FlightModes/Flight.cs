@@ -6,24 +6,10 @@ using UnityEngine;
 
 namespace MouseAimFlight.FlightModes
 {
-    class Flight //This will inherit from a virtual base class
+    abstract class Flight //This will inherit from a virtual base class
     {
-        private static string flightMode = "No Mode"; //Name of the behavior
+        abstract public ErrorData Simulate(Transform vesselTransform, Transform velocityTransform, Vector3 targetPosition, Vector3 upDirection, float upWeighting, Vessel vessel);
 
-        public Flight()
-        {
-
-        }
-
-        public virtual ErrorData Simulate(Transform vesselTransform, Transform velocityTransform, Vector3 targetPosition, Vector3 upDirection, float upWeighting, Vessel vessel)
-        {
-            ErrorData behavior = new ErrorData(0, 0, 0);
-            return behavior;
-        }
-
-        public virtual string GetFlightMode()
-        {
-            return flightMode;
-        }
+        abstract public string GetFlightMode();
     }
 }
