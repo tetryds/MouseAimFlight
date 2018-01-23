@@ -35,10 +35,19 @@ namespace MouseAimFlight
             set
             {
                 string tmp = value.ToUpperInvariant();
+                string oldKeyString = toggleKeyString;
+                KeyCode oldKeyCode = toggleKeyCode;
                 if(tmp != toggleKeyString && tmp.Length == 1)
                 {
-                    toggleKeyString = tmp;
-                    toggleKeyCode = (KeyCode)Enum.Parse(typeof(KeyCode), toggleKeyString);
+                    try {
+                        toggleKeyString = tmp;
+                        toggleKeyCode = (KeyCode)Enum.Parse(typeof(KeyCode), toggleKeyString);
+                    } catch (ArgumentException) {
+                        // invalid keycode
+                        toggleKeyString = oldKeyString;
+                        toggleKeyCode = oldKeyCode;
+                        Debug.Log("[MAF]: Invalid keycode entered for toggle");
+                    }
                     Instance.SaveSettings();
                 }
             }
@@ -56,10 +65,19 @@ namespace MouseAimFlight
             set
             {
                 string tmp = value.ToUpperInvariant();
+                string oldKeyString = flightModeKeyString;
+                KeyCode oldKeyCode = flightModeKeyCode;
                 if (tmp != flightModeKeyString && tmp.Length == 1)
                 {
-                    flightModeKeyString = tmp;
-                    flightModeKeyCode = (KeyCode)Enum.Parse(typeof(KeyCode), flightModeKeyString);
+                    try {
+                        flightModeKeyString = tmp;
+                        flightModeKeyCode = (KeyCode)Enum.Parse(typeof(KeyCode), flightModeKeyString);
+                    } catch (ArgumentException) {
+                        // invalid keycode
+                        flightModeKeyString = oldKeyString;
+                        flightModeKeyCode = oldKeyCode;
+                        Debug.Log("[MAF]: Invalid keycode entered for flightMode");
+                    }
                     Instance.SaveSettings();
                 }
             }
@@ -179,13 +197,21 @@ namespace MouseAimFlight
                 {
                     if (node.HasValue("toggleKey"))
                     {
-                        toggleKeyString = ((string)node.GetValue("toggleKey")).ToUpperInvariant();
-                        toggleKeyCode = (KeyCode)Enum.Parse(typeof(KeyCode), toggleKeyString);
+                        try {
+                            toggleKeyString = ((string)node.GetValue("toggleKey")).ToUpperInvariant();
+                            toggleKeyCode = (KeyCode)Enum.Parse(typeof(KeyCode), toggleKeyString);
+                        } catch (ArgumentException) {
+                            Debug.Log("[MAF]: Invalid keycode in toggleKey config node; skipped");
+                        }
                     }
                     if (node.HasValue("flightModeKey"))
                     {
-                        flightModeKeyString = ((string)node.GetValue("flightModeKey")).ToUpperInvariant();
-                        flightModeKeyCode = (KeyCode)Enum.Parse(typeof(KeyCode), flightModeKeyString);
+                        try {
+                            flightModeKeyString = ((string)node.GetValue("flightModeKey")).ToUpperInvariant();
+                            flightModeKeyCode = (KeyCode)Enum.Parse(typeof(KeyCode), flightModeKeyString);
+                        } catch (ArgumentException) {
+                            Debug.Log("[MAF]: Invalid keycode in flightModeKey config node; skipped");
+                        }
                     }
                     if (node.HasValue("cursorStyle"))
                     {
