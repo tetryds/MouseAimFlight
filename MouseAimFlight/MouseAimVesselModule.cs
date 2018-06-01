@@ -127,6 +127,7 @@ namespace MouseAimFlight
                 return;
             } 
             
+            bool enableHotkeys = GUIUtility.keyboardControl == 0 && !MapView.MapIsEnabled && !InputLockManager.IsAllLocked(ControlTypes.KEYBOARDINPUT);
             if (vessel == FlightGlobals.ActiveVessel && vessel != prevActiveVessel)
             {
                 prevActiveVessel = vessel;
@@ -141,12 +142,12 @@ namespace MouseAimFlight
                     Cursor.visible = true;
                 }
             }
-            else if (Input.GetKeyDown(MouseAimSettings.ToggleKeyCode))
+            else if (enableHotkeys && Input.GetKeyDown(MouseAimSettings.ToggleKeyCode))
             {
                 ToggleMouseAim();
             }
 
-            if (Input.GetKeyDown(MouseAimSettings.FlightModeKeyCode))
+            if (enableHotkeys && Input.GetKeyDown(MouseAimSettings.FlightModeKeyCode))
             {
                 flightMode.NextBehavior();
                 ScreenMessages.PostScreenMessage("Flight Mode: " + flightMode.GetBehaviorName());
