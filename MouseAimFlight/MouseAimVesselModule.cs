@@ -43,7 +43,6 @@ namespace MouseAimFlight
         static bool freeLook = false;
         static bool prevFreeLook = false;
         static bool forceCursorResetNextFrame = false;
-        //static bool pitchYawOverrideMouseAim = false;
         static FieldInfo freeLookKSPCameraField = null;
         
         Vector3 upDirection;
@@ -176,28 +175,21 @@ namespace MouseAimFlight
                 return;
 
             vesselTransform = vessel.ReferenceTransform;
-
-            //if (s.pitch != s.pitchTrim || s.yaw != s.yawTrim)
-            //{
-                //pitchYawOverrideMouseAim = true;
-                //return;
-            //}
-            //else
-                //pitchYawOverrideMouseAim = false;
-
             upDirection = VectorUtils.GetUpDirection(vesselTransform.position);
 
-            FlyToPosition(s, targetPosition + vessel.CoM);
+            if (s.pitch != s.pitchTrim || s.yaw != s.yawTrim)
+            {
+                FlyToPosition(s, vesselTransform.up * 5000f + vessel.CoM);
+                return;
+            }
+            else
+            {
+                FlyToPosition(s, targetPosition + vessel.CoM);
+            }
         }
 
         void UpdateMouseCursorAndCameraRotation()
         {
-            //if (pitchYawOverrideMouseAim)
-            //{
-                //targetPosition = vesselTransform.up * 5000f;
-            //}
-            //else
-            //{
             Vector3 mouseDelta;
 
             if (freeLook)
@@ -226,7 +218,6 @@ namespace MouseAimFlight
             localTarget *= 5000f;
 
             targetPosition = cameraTransform.TransformDirection(localTarget);
-            //}
         }
 
         void UpdateCursorScreenLocation()
@@ -286,10 +277,12 @@ namespace MouseAimFlight
             Steer steer = pilot.Simulate(behavior.pitchError, behavior.rollError, behavior.yawError, localAngVel, terrainAltitude, TimeWarp.fixedDeltaTime, dynPressure, velocity);
 
             //Piloting
-            s.pitch = Mathf.Clamp(steer.pitch, -1, 1);
+            if (s.pitch == s.pitchTrim)
+                s.pitch = Mathf.Clamp(steer.pitch, -1, 1);
             if (s.roll == s.rollTrim)
                 s.roll = Mathf.Clamp(steer.roll, -1, 1);
-            s.yaw = Mathf.Clamp(steer.yaw, -1, 1);
+            if (s.yaw == s.yawTrim)
+                s.yaw = Mathf.Clamp(steer.yaw, -1, 1);
         }
 
         void TweakControlSurfaces(bool mouseFlightActive) //Tweak stock control surfaces for sane behavior
