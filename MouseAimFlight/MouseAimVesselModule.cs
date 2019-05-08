@@ -47,7 +47,6 @@ namespace MouseAimFlight
         
         Vector3 upDirection;
         Vector3 targetPosition;
-        Vector3d localTarget;
         Vector3 mouseAimScreenLocation;
         Vector3 vesselForwardScreenLocation;
 
@@ -159,11 +158,7 @@ namespace MouseAimFlight
             if (!mouseAimActive)
                 return;
 
-            UpdateMouseCursorForCameraRotation();
-
-            if (!freeLook)
-                UpdateCameraRotation();
-
+            UpdateMouseCursorAndCameraRotation();
             UpdateVesselScreenLocation();
             UpdateCursorScreenLocation();
         }
@@ -185,6 +180,7 @@ namespace MouseAimFlight
             if (s.pitch != s.pitchTrim || s.yaw != s.yawTrim)
             {
                 FlyToPosition(s, vesselTransform.up * 5000f + vessel.CoM);
+                return;
             }
             else
             {
@@ -192,7 +188,7 @@ namespace MouseAimFlight
             }
         }
 
-        void UpdateMouseCursorForCameraRotation()
+        void UpdateMouseCursorAndCameraRotation()
         {
             Vector3 mouseDelta;
 
@@ -208,20 +204,20 @@ namespace MouseAimFlight
 
             Transform cameraTransform = FlightCamera.fetch.mainCamera.transform;
 
-            localTarget = cameraTransform.InverseTransformDirection(targetPosition);
+            Vector3d localTarget = cameraTransform.InverseTransformDirection(targetPosition);
             localTarget += mouseDelta;
             localTarget.Normalize();
+            if (!freeLook)
+            {
+                float targetPitch = Clamp(FlightCamera.CamPitch - Mathf.Asin((float)localTarget.y) + 0.15f, -Mathf.PI * 0.47f, Mathf.PI * 0.47f);
+                float targetHdg = FlightCamera.CamHdg + (float)Math.Atan2(localTarget.x, localTarget.z);
+                FlightCamera.CamPitch = Mathf.Lerp(FlightCamera.CamPitch, targetPitch, 1 - Mathf.Exp(-7.5f * Time.fixedDeltaTime));
+                FlightCamera.CamPitch = Clamp(FlightCamera.CamPitch, -Mathf.PI * 0.47f, Mathf.PI * 0.47f);
+                FlightCamera.CamHdg = Mathf.Lerp(FlightCamera.CamHdg, targetHdg, 1 - Mathf.Exp(-7.5f * Time.fixedDeltaTime)); //Frame-independent update
+            }
+            localTarget *= 5000f;
 
-            targetPosition = cameraTransform.TransformDirection(localTarget * 5000f);
-        }
-
-        void UpdateCameraRotation()
-        {
-            float targetPitch = Mathf.Clamp(FlightCamera.CamPitch - Mathf.Asin((float)localTarget.y) + 0.15f, -Mathf.PI * 0.47f, Mathf.PI * 0.47f);
-            float targetHdg = FlightCamera.CamHdg + (float)Math.Atan2(localTarget.x, localTarget.z);
-            FlightCamera.CamPitch = Mathf.Lerp(FlightCamera.CamPitch, targetPitch, 1 - Mathf.Exp(-7.5f * Time.fixedDeltaTime));
-            FlightCamera.CamPitch = Mathf.Clamp(FlightCamera.CamPitch, -Mathf.PI * 0.47f, Mathf.PI * 0.47f);
-            FlightCamera.CamHdg = Mathf.Lerp(FlightCamera.CamHdg, targetHdg, 1 - Mathf.Exp(-7.5f * Time.fixedDeltaTime)); //Frame-independent update
+            targetPosition = cameraTransform.TransformDirection(localTarget);
         }
 
         void UpdateCursorScreenLocation()
@@ -318,6 +314,17 @@ namespace MouseAimFlight
         {
             if (vessel)
                 vessel.OnAutopilotUpdate -= MouseAimPilot;
+        }
+
+        static T Clamp<T>(T value, T min, T max)
+        where T : System.IComparable<T>
+        {
+            T result = value;
+            if (value.CompareTo(max) > 0)
+                result = max;
+            if (value.CompareTo(min) < 0)
+                result = min;
+            return result;
         }
     }
 }
