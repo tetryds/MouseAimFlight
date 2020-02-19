@@ -127,7 +127,7 @@ namespace MouseAimFlight
                 return;
             } 
             
-            bool enableHotkeys = GUIUtility.keyboardControl == 0 && !MapView.MapIsEnabled && !InputLockManager.IsAllLocked(ControlTypes.KEYBOARDINPUT);
+            bool enableHotkeys = !MapView.MapIsEnabled && !InputLockManager.IsAllLocked(ControlTypes.KEYBOARDINPUT);
             if (vessel == FlightGlobals.ActiveVessel && vessel != prevActiveVessel)
             {
                 prevActiveVessel = vessel;

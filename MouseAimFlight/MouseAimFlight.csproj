@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>MouseAimFlight</RootNamespace>
     <AssemblyName>MouseAimFlight</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
   </PropertyGroup>
@@ -21,6 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -29,20 +30,36 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Assembly-CSharp">
-      <HintPath>..\..\..\..\..\STEAMSSD\steamapps\common\Kerbal Space Program\KSP_x64_Data\Managed\Assembly-CSharp.dll</HintPath>
+      <HintPath>..\..\..\SteamHDD\steamapps\common\Kerbal Space Program\KSP_x64_Data\Managed\Assembly-CSharp.dll</HintPath>
     </Reference>
     <Reference Include="KSPAssets">
-      <HintPath>..\..\..\..\..\STEAMSSD\steamapps\common\Kerbal Space Program\KSP_x64_Data\Managed\KSPAssets.dll</HintPath>
+      <HintPath>..\..\..\SteamHDD\steamapps\common\Kerbal Space Program\KSP_x64_Data\Managed\KSPAssets.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="UnityEngine">
-      <HintPath>..\..\..\..\..\STEAMSSD\steamapps\common\Kerbal Space Program\KSP_x64_Data\Managed\UnityEngine.dll</HintPath>
+      <HintPath>..\..\..\SteamHDD\steamapps\common\Kerbal Space Program\KSP_x64_Data\Managed\UnityEngine.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.AnimationModule">
+      <HintPath>..\..\..\SteamHDD\steamapps\common\Kerbal Space Program\KSP_x64_Data\Managed\UnityEngine.AnimationModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.CoreModule">
+      <HintPath>..\..\..\SteamHDD\steamapps\common\Kerbal Space Program\KSP_x64_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.IMGUIModule">
+      <HintPath>..\..\..\SteamHDD\steamapps\common\Kerbal Space Program\KSP_x64_Data\Managed\UnityEngine.IMGUIModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.InputLegacyModule">
+      <HintPath>..\..\..\SteamHDD\steamapps\common\Kerbal Space Program\KSP_x64_Data\Managed\UnityEngine.InputLegacyModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.InputModule">
+      <HintPath>..\..\..\SteamHDD\steamapps\common\Kerbal Space Program\KSP_x64_Data\Managed\UnityEngine.InputModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.UI">
-      <HintPath>..\..\..\..\..\STEAMSSD\steamapps\common\Kerbal Space Program\KSP_x64_Data\Managed\UnityEngine.UI.dll</HintPath>
+      <HintPath>..\..\..\SteamHDD\steamapps\common\Kerbal Space Program\KSP_x64_Data\Managed\UnityEngine.UI.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
