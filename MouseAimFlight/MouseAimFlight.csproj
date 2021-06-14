@@ -34,46 +34,55 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Assembly-CSharp">
-      <HintPath>..\..\..\SteamHDD\steamapps\common\Kerbal Space Program\KSP_x64_Data\Managed\Assembly-CSharp.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Kerbal Space Program\KSP_x64_Data\Managed\Assembly-CSharp.dll</HintPath>
     </Reference>
     <Reference Include="KSPAssets">
-      <HintPath>..\..\..\SteamHDD\steamapps\common\Kerbal Space Program\KSP_x64_Data\Managed\KSPAssets.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Kerbal Space Program\KSP_x64_Data\Managed\KSPAssets.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="UnityEngine">
-      <HintPath>..\..\..\SteamHDD\steamapps\common\Kerbal Space Program\KSP_x64_Data\Managed\UnityEngine.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Kerbal Space Program\KSP_x64_Data\Managed\UnityEngine.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.AnimationModule">
-      <HintPath>..\..\..\SteamHDD\steamapps\common\Kerbal Space Program\KSP_x64_Data\Managed\UnityEngine.AnimationModule.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Kerbal Space Program\KSP_x64_Data\Managed\UnityEngine.AnimationModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.CoreModule">
-      <HintPath>..\..\..\SteamHDD\steamapps\common\Kerbal Space Program\KSP_x64_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Kerbal Space Program\KSP_x64_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.IMGUIModule">
-      <HintPath>..\..\..\SteamHDD\steamapps\common\Kerbal Space Program\KSP_x64_Data\Managed\UnityEngine.IMGUIModule.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Kerbal Space Program\KSP_x64_Data\Managed\UnityEngine.IMGUIModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.InputLegacyModule">
-      <HintPath>..\..\..\SteamHDD\steamapps\common\Kerbal Space Program\KSP_x64_Data\Managed\UnityEngine.InputLegacyModule.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Kerbal Space Program\KSP_x64_Data\Managed\UnityEngine.InputLegacyModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.InputModule">
-      <HintPath>..\..\..\SteamHDD\steamapps\common\Kerbal Space Program\KSP_x64_Data\Managed\UnityEngine.InputModule.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Kerbal Space Program\KSP_x64_Data\Managed\UnityEngine.InputModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.UI">
-      <HintPath>..\..\..\SteamHDD\steamapps\common\Kerbal Space Program\KSP_x64_Data\Managed\UnityEngine.UI.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Kerbal Space Program\KSP_x64_Data\Managed\UnityEngine.UI.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AdaptivePID.cs" />
-    <Compile Include="FlightModes\CruiseFlight.cs" />
-    <Compile Include="FlightModes\AggressiveFlight.cs" />
-    <Compile Include="FlightModes\Flight.cs" />
-    <Compile Include="FlightBehavior.cs" />
-    <Compile Include="FlightModes\NormalFlight.cs" />
-    <Compile Include="MouseAimFlightSceneGUI.cs" />
-    <Compile Include="MouseAimSettings.cs" />
-    <Compile Include="MouseAimVesselModule.cs" />
-    <Compile Include="PID.cs" />
-    <Compile Include="VectorUtils.cs" />
+    <Compile Include="Filter\InputPid.cs" />
+    <Compile Include="Filter\ControlFilter.cs" />
+    <Compile Include="FlightBehavior\FlightController.cs" />
+    <Compile Include="FlightBehavior\BasicFlight.cs" />
+    <Compile Include="FlightBehavior\IFlightAI.cs" />
+    <Compile Include="Filter\InputControls.cs" />
+    <Compile Include="Target\TargetModule.cs" />
+    <Compile Include="Target\TargetData.cs" />
+    <Compile Include="Old\AdaptivePID.cs" />
+    <Compile Include="Old\FlightModes\CruiseFlight.cs" />
+    <Compile Include="Old\FlightModes\AggressiveFlight.cs" />
+    <Compile Include="Old\FlightModes\Flight.cs" />
+    <Compile Include="Old\FlightBehavior.cs" />
+    <Compile Include="Old\FlightModes\NormalFlight.cs" />
+    <Compile Include="Old\MouseAimFlightSceneGUI.cs" />
+    <Compile Include="Old\MouseAimSettings.cs" />
+    <Compile Include="MouseAimFlightModule.cs" />
+    <Compile Include="Old\MouseAimVesselModule.cs" />
+    <Compile Include="Old\PID.cs" />
+    <Compile Include="Old\VectorUtils.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />

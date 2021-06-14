@@ -51,6 +51,8 @@ namespace MouseAimFlight
         Vector3 mouseAimScreenLocation;
         Vector3 vesselForwardScreenLocation;
 
+        MouseAimFlightModule flightModule;
+
         GameObject vobj;
         Transform velocityTransform
         {
@@ -89,6 +91,7 @@ namespace MouseAimFlight
 
         void Start()
         {
+            flightModule = new MouseAimFlightModule();
             vessel.OnAutopilotUpdate += MouseAimPilot;
 
             pilot = new AdaptivePID();
@@ -255,30 +258,33 @@ namespace MouseAimFlight
 
         void FlyToPosition(FlightCtrlState s, Vector3 targetPosition)
         {
-            Vector3 localAngVel = vessel.angularVelocity * Mathf.Rad2Deg;
+            //Vector3 localAngVel = vessel.angularVelocity * Mathf.Rad2Deg;
 
-            float terrainAltitude;
-            float dynPressure;
-            float velocity;
+            //float terrainAltitude;
+            //float dynPressure;
+            //float velocity;
 
-            //Setup
-            terrainAltitude = (float)vessel.heightFromTerrain;
-            dynPressure = (float)vessel.dynamicPressurekPa;
-            velocity = (float)vessel.srfSpeed;
+            ////Setup
+            //terrainAltitude = (float)vessel.heightFromTerrain;
+            //dynPressure = (float)vessel.dynamicPressurekPa;
+            //velocity = (float)vessel.srfSpeed;
 
-            float upWeighting = pilot.UpWeighting(terrainAltitude, velocity);
+            //float upWeighting = pilot.UpWeighting(terrainAltitude, velocity);
 
-            //Calculating errors
-            ErrorData behavior = flightMode.Simulate(vesselTransform, velocityTransform, targetPosition, upDirection, upWeighting, vessel);
+            ////Calculating errors
+            //ErrorData behavior = flightMode.Simulate(vesselTransform, velocityTransform, targetPosition, upDirection, upWeighting, vessel);
 
-            //Controlling
-            Steer steer = pilot.Simulate(behavior.pitchError, behavior.rollError, behavior.yawError, localAngVel, terrainAltitude, TimeWarp.fixedDeltaTime, dynPressure, velocity);
+            ////Controlling
+            //Steer steer = pilot.Simulate(behavior.pitchError, behavior.rollError, behavior.yawError, localAngVel, terrainAltitude, TimeWarp.fixedDeltaTime, dynPressure, velocity);
 
-            //Piloting
-            s.pitch = Mathf.Clamp(steer.pitch, -1, 1);
-            if (s.roll == s.rollTrim)
-                s.roll = Mathf.Clamp(steer.roll, -1, 1);
-            s.yaw = Mathf.Clamp(steer.yaw, -1, 1);
+            ////Piloting
+            //s.pitch = Mathf.Clamp(steer.pitch, -1, 1);
+            //if (s.roll == s.rollTrim)
+            //    s.roll = Mathf.Clamp(steer.roll, -1, 1);
+            //s.yaw = Mathf.Clamp(steer.yaw, -1, 1);
+            Vector3 targetDir = (targetPosition - vesselTransform.position).normalized;
+            flightModule.UpdateControls(s, vessel, targetDir);
+
         }
 
         void TweakControlSurfaces(bool mouseFlightActive) //Tweak stock control surfaces for sane behavior
